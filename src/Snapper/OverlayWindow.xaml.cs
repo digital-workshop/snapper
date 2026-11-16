@@ -84,8 +84,19 @@ public partial class OverlayWindow : Window
     {
         base.OnMouseMove(e);
         if (!_dragging) return;
+        UpdateSelection(e.GetPosition(Root));
+    }
 
-        var p = e.GetPosition(Root);
+    /// <summary>Für Beispielbilder: eine Auswahl ohne Maus setzen.</summary>
+    internal void DemoSelect(Point a, Point b)
+    {
+        _start = a;
+        Hint.Visibility = Visibility.Collapsed;
+        UpdateSelection(b);
+    }
+
+    private void UpdateSelection(Point p)
+    {
         p.X = Math.Clamp(p.X, 0, Root.ActualWidth);
         p.Y = Math.Clamp(p.Y, 0, Root.ActualHeight);
         _sel = new Rect(_start, p);

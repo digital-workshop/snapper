@@ -112,6 +112,9 @@ public partial class EditorWindow
             tenc.Save(tfs);
         }
 
+        // Für das Fensterbild: Pfeil-Werkzeug zeigen (dann sind die Pfeil-Stile sichtbar)
+        SetTool(Tool.Arrow);
+
         // Fenster
         UpdateLayout();
         double dpi = Dpi;

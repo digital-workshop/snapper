@@ -4,6 +4,18 @@ Schneller Screenshot-Ausschnitt mit Editor für Windows. Ein Nachbau der Grundid
 
 Programm starten → der Bildschirm friert ein → Bereich aufziehen → im Editor beschriften → kopieren oder speichern.
 
+## Screenshots
+
+Der Editor mit Werkzeugen links, Einstellungen rechts und der roten „Ziehen“-Lasche unten:
+
+![Der Snapper-Editor](docs/editor.png)
+
+Die Auswahl: Bildschirm einfrieren, Bereich aufziehen, Größe wird angezeigt:
+
+![Die Bereichsauswahl](docs/auswahl.png)
+
+(Beispielbilder mit erfundenem Inhalt.)
+
 ## Funktionen
 
 - **Sofort startklar:** Beim Start wird der Bildschirm eingefroren, du ziehst ein Rechteck auf (mit Größenanzeige). `Esc` bricht ab.
