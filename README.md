@@ -12,6 +12,7 @@ Programm starten → der Bildschirm friert ein → Bereich aufziehen → im Edit
 - **Text**, **Rechteck** und **Verpixeln** (nicht umkehrbar, auch für Namen und Passwörter).
 - 6 Farben, 3 Dicken, Rückgängig und Wiederholen.
 - **Kopieren** in die Zwischenablage, **Speichern** als PNG nach `Bilder\Screenshots` (Name mit Datum und Uhrzeit).
+- **Ziehen:** Der rote Knopf „Ziehen“ unten im Editor gibt das fertige Bild als PNG-Datei weiter. Festhalten und in Mail, Chat, Explorer oder Claude Code fallen lassen. Die Datei liegt in `%TEMP%Snapper` und wird nach 7 Tagen automatisch gelöscht.
 - Zoom mit `Strg` + Mausrad, Verschieben mit der mittleren Maustaste.
 
 ## Tastenkürzel

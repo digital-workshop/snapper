@@ -21,6 +21,7 @@ public partial class App : Application
             args.Handled = true;
             Shutdown(1);
         };
+        CleanDragFolder();
         int i = Array.IndexOf(e.Args, "--selftest");
         if (i >= 0 && i + 1 < e.Args.Length)
         {
@@ -112,6 +113,20 @@ public partial class App : Application
         var list = _overlays.ToList();
         _overlays.Clear();
         foreach (var o in list) o.Close();
+    }
+
+    /// <summary>Löscht gezogene Bilder im Temp-Ordner, die älter als 7 Tage sind.</summary>
+    private static void CleanDragFolder()
+    {
+        try
+        {
+            var dir = EditorWindow.DragFolder;
+            if (!Directory.Exists(dir)) return;
+            foreach (var f in Directory.GetFiles(dir, "Screenshot_*.png"))
+                if (DateTime.UtcNow - File.GetLastWriteTimeUtc(f) > TimeSpan.FromDays(7))
+                    File.Delete(f);
+        }
+        catch { }
     }
 
     public static void Log(string text)

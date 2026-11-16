@@ -76,6 +76,11 @@ public partial class EditorWindow
             enc.Save(fs);
         }
 
+        // Datei für "Ziehen"
+        string dragFile = WriteDragFile(result);
+        File.AppendAllText(Path.Combine(outDir, "info.txt"),
+            $"Ziehen-Datei: {(File.Exists(dragFile) ? "ok" : "FEHLT")} {dragFile}\n");
+
         // Fenster
         UpdateLayout();
         double dpi = Dpi;

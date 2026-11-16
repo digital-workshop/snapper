@@ -73,6 +73,7 @@ public partial class EditorWindow : Window
         ZoomLayer.Width = image.PixelWidth;
         ZoomLayer.Height = image.PixelHeight;
         SizeChip.Text = $"{image.PixelWidth} × {image.PixelHeight} px";
+        DragSize.Text = $"({image.PixelWidth}×{image.PixelHeight})";
 
         BuildColors();
         BuildStyles();
@@ -606,6 +607,65 @@ public partial class EditorWindow : Window
         rtb.Render(dv);
         rtb.Freeze();
         return rtb;
+    }
+
+    // ---------- Ziehen (Bild als Datei in andere Programme ziehen) ----------
+
+    private Point _dragStart;
+    private bool _dragArmed;
+
+    private void Drag_MouseDown(object s, MouseButtonEventArgs e)
+    {
+        _dragStart = e.GetPosition(this);
+        _dragArmed = true;
+        DragPill.CaptureMouse();
+    }
+
+    private void Drag_MouseUp(object s, MouseButtonEventArgs e)
+    {
+        _dragArmed = false;
+        DragPill.ReleaseMouseCapture();
+    }
+
+    private void Drag_MouseMove(object s, MouseEventArgs e)
+    {
+        if (!_dragArmed || e.LeftButton != MouseButtonState.Pressed) return;
+        var d = e.GetPosition(this) - _dragStart;
+        if (Math.Abs(d.X) < SystemParameters.MinimumHorizontalDragDistance &&
+            Math.Abs(d.Y) < SystemParameters.MinimumVerticalDragDistance) return;
+
+        _dragArmed = false;
+        DragPill.ReleaseMouseCapture();
+        try
+        {
+            var bmp = RenderResult();
+            string file = WriteDragFile(bmp);
+
+            var data = new DataObject();
+            data.SetData(DataFormats.FileDrop, new[] { file });
+            data.SetImage(bmp);
+            DragDrop.DoDragDrop(DragPill, data, DragDropEffects.Copy);
+        }
+        catch (Exception ex)
+        {
+            App.Log(ex.ToString());
+            ShowToast("Ziehen hat nicht geklappt", null);
+        }
+    }
+
+    /// <summary>PNG im Temp-Ordner. Alte Dateien (über 7 Tage) räumt Snapper beim Start auf.</summary>
+    internal static string DragFolder =>
+        Path.Combine(Path.GetTempPath(), "Snapper");
+
+    private static string WriteDragFile(BitmapSource bmp)
+    {
+        Directory.CreateDirectory(DragFolder);
+        string file = Path.Combine(DragFolder, $"Screenshot_{DateTime.Now:yyyy-MM-dd_HH-mm-ss-fff}.png");
+        var enc = new PngBitmapEncoder();
+        enc.Frames.Add(BitmapFrame.Create(bmp));
+        using var fs = File.Create(file);
+        enc.Save(fs);
+        return file;
     }
 
     private void Copy_Click(object s, RoutedEventArgs e) => CopyImage();

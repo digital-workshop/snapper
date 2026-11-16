@@ -134,7 +134,24 @@
                         </Border>
 
                         <!-- Zoom unten -->
-                        <Border HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,16"
+                        <!-- Ziehen: Bild als Datei in andere Programme ziehen -->
+                        <Border x:Name="DragPill" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,16"
+                                Background="#FFFF2D5F" CornerRadius="20" Padding="18,0" Height="40" Cursor="Hand"
+                                ToolTip="Festhalten und in eine App, Mail oder einen Chat ziehen"
+                                PreviewMouseLeftButtonDown="Drag_MouseDown" PreviewMouseMove="Drag_MouseMove"
+                                PreviewMouseLeftButtonUp="Drag_MouseUp">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#FF2D5F" BlurRadius="20" ShadowDepth="4" Direction="270" Opacity="0.35" />
+                            </Border.Effect>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" IsHitTestVisible="False">
+                                <TextBlock FontFamily="{StaticResource IconFont}" Text="&#xE8A7;" Foreground="White" FontSize="14" Margin="0,1,9,0" VerticalAlignment="Center" />
+                                <TextBlock Text="Ziehen" Foreground="White" FontWeight="SemiBold" FontSize="14" VerticalAlignment="Center" />
+                                <TextBlock x:Name="DragSize" Foreground="White" Opacity="0.8" FontSize="12" Margin="8,1,0,0" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Zoom unten rechts -->
+                        <Border HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,16,16"
                                 Background="#F2FFFFFF" CornerRadius="18" Padding="6,4">
                             <Border.Effect>
                                 <DropShadowEffect Color="#1B1D26" BlurRadius="20" ShadowDepth="4" Direction="270" Opacity="0.14" />
