@@ -38,6 +38,6 @@ public partial class DragTabWindow : Window
             Math.Abs(d.Y) < SystemParameters.MinimumVerticalDragDistance) return;
 
         _armed = false;
-        _editor.StartFileDrag(Tab);
+        _editor.StartFileDrag((UIElement)Content);
     }
 }
