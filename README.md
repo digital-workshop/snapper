@@ -39,8 +39,18 @@ dotnet run --project src\Snapper
 powershell -File publish.ps1
 ```
 
-Die `Snapper.exe` kannst du an die Taskleiste heften. Ein Klick startet sofort die Auswahl.
-Zum Ausführen braucht man die [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download).
+Die `Snapper.exe` (ca. 140 MB) bringt .NET selbst mit. Auf dem Rechner muss nichts installiert sein.
+Du kannst sie an die Taskleiste heften. Ein Klick startet sofort die Auswahl.
+
+Hinweis: Die `.exe` ist nicht signiert. Beim ersten Start nach einem Download zeigt Windows evtl. „Der Computer wurde durch Windows geschützt“. Dann auf „Weitere Informationen“ und „Trotzdem ausführen“ klicken.
+
+## Neue Version veröffentlichen
+
+1. In `src\Snapper\Snapper.csproj` die `<Version>` hochzählen (z. B. `1.1.0`).
+2. `powershell -File publish.ps1` ausführen. Das baut `publish\Snapper.exe`.
+3. Auf GitHub unter **Releases → Draft a new release** einen Tag anlegen, der zur Version passt (z. B. `v1.1.0`), und `publish\Snapper.exe` anhängen. Auf „Publish release“ klicken.
+
+Snapper fragt beim Öffnen des Editors (höchstens alle 12 Stunden) bei GitHub nach dem neuesten Release. Ist die Version dort höher, erscheint oben der Knopf „Update x.y.z verfügbar“. Ein Klick öffnet die Release-Seite zum Herunterladen. Dabei werden keine Daten über den Nutzer gesendet. Das Update ersetzt man von Hand: Snapper schließen und die alte `Snapper.exe` überschreiben.
 
 ## Selbsttest (für Entwickler)
 
@@ -54,4 +64,5 @@ Zeichnet per Code in einen Beispiel-Ausschnitt und legt `result.png` (fertiges B
 
 Pfeile und Objekte nachträglich ändern und verschieben, Stift, Radierer, Zuschneiden, globales Tastenkürzel, Fenster- und Vollbild-Auswahl, Weichzeichnen.
 
+Die Update-Prüfung merkt sich ihr Ergebnis in `%LOCALAPPDATA%\Snapper\update.json`.
 Fehler werden nach `%LOCALAPPDATA%\Snapper\log.txt` geschrieben.

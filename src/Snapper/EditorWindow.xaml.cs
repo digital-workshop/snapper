@@ -96,6 +96,7 @@ public partial class EditorWindow : Window
         {
             BeginAnimation(OpacityProperty, new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(180)));
             CreateTab();
+            if (!SkipUpdateCheck) _ = CheckForUpdateAsync();
         };
     }
 
@@ -613,6 +614,26 @@ public partial class EditorWindow : Window
     }
 
     // ---------- Ziehen (Bild als Datei in andere Programme ziehen) ----------
+
+    // ---------- Update-Meldung ----------
+
+    internal static bool SkipUpdateCheck;
+    private string? _updateUrl;
+
+    private async Task CheckForUpdateAsync()
+    {
+        var info = await UpdateChecker.CheckAsync();
+        if (info == null) return;
+        _updateUrl = info.Url;
+        UpdateText.Text = $"Update {info.Version} verfügbar";
+        UpdateBtn.Visibility = Visibility.Visible;
+    }
+
+    private void Update_Click(object s, RoutedEventArgs e)
+    {
+        if (!UpdateChecker.IsSafeUrl(_updateUrl)) return;
+        try { Process.Start(new ProcessStartInfo(_updateUrl!) { UseShellExecute = true }); } catch { }
+    }
 
     private DragTabWindow? _tab;
 

@@ -60,6 +60,14 @@
                             <TextBlock Text="Neuer Ausschnitt" VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
+                    <Button x:Name="UpdateBtn" Style="{StaticResource PillButton}" Visibility="Collapsed" Margin="10,0,0,0"
+                            Foreground="{StaticResource Accent}" ToolTip="Öffnet die Download-Seite"
+                            shell:WindowChrome.IsHitTestVisibleInChrome="True" Click="Update_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontFamily="{StaticResource IconFont}" Text="&#xE896;" FontSize="12" VerticalAlignment="Center" Margin="0,0,8,0" />
+                            <TextBlock x:Name="UpdateText" Text="Update verfügbar" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center"

@@ -76,6 +76,19 @@ public partial class EditorWindow
             enc.Save(fs);
         }
 
+        // Update-Vergleich (ohne Netz)
+        const string ok = "https://github.com/digital-workshop/snapper/releases/tag/x";
+        var cur = new Version(1, 0, 0);
+        bool upd =
+            UpdateChecker.Evaluate("v1.0.0", ok, cur) == null &&
+            UpdateChecker.Evaluate("v0.9.0", ok, cur) == null &&
+            UpdateChecker.Evaluate("v1.0.1", ok, cur)?.Version == "1.0.1" &&
+            UpdateChecker.Evaluate("2.0", ok, cur)?.Version == "2.0.0" &&
+            UpdateChecker.Evaluate("quatsch", ok, cur) == null &&
+            UpdateChecker.Evaluate("v9.0.0", "https://evil.example/x", cur) == null &&
+            UpdateChecker.Evaluate(null, ok, cur) == null;
+        File.AppendAllText(Path.Combine(outDir, "info.txt"), $"Update-Vergleich: {(upd ? "ok" : "FEHLER")}\n");
+
         // Datei für "Ziehen"
         string dragFile = WriteDragFile(result);
         File.AppendAllText(Path.Combine(outDir, "info.txt"),

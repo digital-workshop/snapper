@@ -16,6 +16,7 @@ internal static class SelfTest
     public static void Run(string outDir)
     {
         Directory.CreateDirectory(outDir);
+        EditorWindow.SkipUpdateCheck = true;
         var sample = MakeSample(1000, 400);
         // Fenster weit außerhalb des Bildschirms, damit nichts aufblitzt.
         var fake = new ScreenShot(-32000, 0, 5120, 1440, 1.25, true, sample);
