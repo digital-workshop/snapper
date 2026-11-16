@@ -81,6 +81,24 @@ public partial class EditorWindow
         File.AppendAllText(Path.Combine(outDir, "info.txt"),
             $"Ziehen-Datei: {(File.Exists(dragFile) ? "ok" : "FEHLT")} {dragFile}\n");
 
+        // Reiter "Ziehen": Lage zum Fenster prüfen und Bild ablegen
+        if (Tab != null)
+        {
+            Native.GetWindowRect(new System.Windows.Interop.WindowInteropHelper(this).Handle, out var er);
+            Native.GetWindowRect(new System.Windows.Interop.WindowInteropHelper(Tab).Handle, out var tr);
+            int midE = (er.Left + er.Right) / 2, midT = (tr.Left + tr.Right) / 2;
+            File.AppendAllText(Path.Combine(outDir, "info.txt"),
+                $"Reiter: oben={tr.Top} Fensterunterkante={er.Bottom} (Soll: oben = Unterkante-1)  Mitte-Abweichung={midT - midE}px  Höhe={tr.Bottom - tr.Top}px\n");
+            double td = Dpi;
+            int tw = (int)Math.Round(Tab.ActualWidth * td), th = (int)Math.Round(Tab.ActualHeight * td);
+            var trtb = new RenderTargetBitmap(tw, th, 96 * td, 96 * td, PixelFormats.Pbgra32);
+            trtb.Render(Tab);
+            using var tfs = File.Create(Path.Combine(outDir, "tab.png"));
+            var tenc = new PngBitmapEncoder();
+            tenc.Frames.Add(BitmapFrame.Create(trtb));
+            tenc.Save(tfs);
+        }
+
         // Fenster
         UpdateLayout();
         double dpi = Dpi;

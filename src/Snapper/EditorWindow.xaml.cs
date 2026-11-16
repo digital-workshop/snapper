@@ -73,7 +73,6 @@ public partial class EditorWindow : Window
         ZoomLayer.Width = image.PixelWidth;
         ZoomLayer.Height = image.PixelHeight;
         SizeChip.Text = $"{image.PixelWidth} × {image.PixelHeight} px";
-        DragSize.Text = $"({image.PixelWidth}×{image.PixelHeight})";
 
         BuildColors();
         BuildStyles();
@@ -93,7 +92,11 @@ public partial class EditorWindow : Window
         Height = Math.Clamp(imgH + 58 + 14 + 110, 660, Math.Max(660, monH * 0.92));
 
         Opacity = 0;
-        Loaded += (_, _) => BeginAnimation(OpacityProperty, new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(180)));
+        Loaded += (_, _) =>
+        {
+            BeginAnimation(OpacityProperty, new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(180)));
+            CreateTab();
+        };
     }
 
     private static DropShadowEffect MakeShadow()
@@ -611,31 +614,11 @@ public partial class EditorWindow : Window
 
     // ---------- Ziehen (Bild als Datei in andere Programme ziehen) ----------
 
-    private Point _dragStart;
-    private bool _dragArmed;
+    private DragTabWindow? _tab;
 
-    private void Drag_MouseDown(object s, MouseButtonEventArgs e)
+    /// <summary>Wird vom Reiter unter dem Fenster aufgerufen, sobald man zieht.</summary>
+    internal void StartFileDrag(UIElement source)
     {
-        _dragStart = e.GetPosition(this);
-        _dragArmed = true;
-        DragPill.CaptureMouse();
-    }
-
-    private void Drag_MouseUp(object s, MouseButtonEventArgs e)
-    {
-        _dragArmed = false;
-        DragPill.ReleaseMouseCapture();
-    }
-
-    private void Drag_MouseMove(object s, MouseEventArgs e)
-    {
-        if (!_dragArmed || e.LeftButton != MouseButtonState.Pressed) return;
-        var d = e.GetPosition(this) - _dragStart;
-        if (Math.Abs(d.X) < SystemParameters.MinimumHorizontalDragDistance &&
-            Math.Abs(d.Y) < SystemParameters.MinimumVerticalDragDistance) return;
-
-        _dragArmed = false;
-        DragPill.ReleaseMouseCapture();
         try
         {
             var bmp = RenderResult();
@@ -644,13 +627,63 @@ public partial class EditorWindow : Window
             var data = new DataObject();
             data.SetData(DataFormats.FileDrop, new[] { file });
             data.SetImage(bmp);
-            DragDrop.DoDragDrop(DragPill, data, DragDropEffects.Copy);
+            DragDrop.DoDragDrop(source, data, DragDropEffects.Copy);
         }
         catch (Exception ex)
         {
             App.Log(ex.ToString());
             ShowToast("Ziehen hat nicht geklappt", null);
         }
+    }
+
+    /// <summary>Reiter "Ziehen" erzeugen. Er hängt unten aus dem Fenster heraus.</summary>
+    private void CreateTab()
+    {
+        _tab = new DragTabWindow(this, $"({_base.PixelWidth}×{_base.PixelHeight})") { Owner = this };
+        LocationChanged += (_, _) => PositionTab();
+        SizeChanged += (_, _) => PositionTab();
+        StateChanged += (_, _) => PositionTab();
+        IsVisibleChanged += (_, _) =>
+        {
+            if (_tab == null) return;
+            if (IsVisible) { _tab.Show(); PositionTab(); } else _tab.Hide();
+        };
+        Closed += (_, _) => { _tab?.Close(); _tab = null; };
+        _tab.Show();
+        PositionTab();
+        // Nach dem ersten Layout nochmal, weil die Größe des Reiters erst dann feststeht.
+        Dispatcher.BeginInvoke(new Action(PositionTab), DispatcherPriority.ContextIdle);
+    }
+
+    internal DragTabWindow? Tab => _tab;
+
+    /// <summary>Reiter mittig an die Unterkante setzen. Wo kein Platz unter dem Fenster ist, kommt er nach innen.</summary>
+    private void PositionTab()
+    {
+        var tab = _tab;
+        if (tab == null || !tab.IsVisible) return;
+        var hwnd = new WindowInteropHelper(this).Handle;
+        var thwnd = new WindowInteropHelper(tab).Handle;
+        if (hwnd == IntPtr.Zero || thwnd == IntPtr.Zero) return;
+
+        double dpi = Dpi;
+        var origin = PointToScreen(new Point(0, 0));
+        double cw = ActualWidth * dpi, ch = ActualHeight * dpi;
+        int tw = (int)Math.Round(tab.ActualWidth * dpi), th = (int)Math.Round(tab.ActualHeight * dpi);
+        if (tw <= 0 || th <= 0) return;
+
+        int x = (int)Math.Round(origin.X + (cw - tw) / 2);
+        int bottom = (int)Math.Round(origin.Y + ch);
+        int y = bottom - (int)Math.Round(1 * dpi);
+
+        // Unter dem Fenster muss Platz sein. Sonst (z. B. maximiert) nach innen.
+        var mon = Native.MonitorFromWindow(hwnd, 2);
+        var mi = new Native.MONITORINFOEX { cbSize = Marshal.SizeOf<Native.MONITORINFOEX>() };
+        if (Native.GetMonitorInfo(mon, ref mi) && y + th > mi.rcWork.Bottom)
+            y = Math.Min(bottom, mi.rcWork.Bottom) - th - (int)Math.Round(10 * dpi);
+
+        Native.SetWindowPos(thwnd, IntPtr.Zero, x, y, 0, 0,
+            Native.SWP_NOZORDER | Native.SWP_NOACTIVATE | Native.SWP_NOSIZE);
     }
 
     /// <summary>PNG im Temp-Ordner. Alte Dateien (über 7 Tage) räumt Snapper beim Start auf.</summary>
