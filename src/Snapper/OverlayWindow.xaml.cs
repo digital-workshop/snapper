@@ -25,6 +25,14 @@ public partial class OverlayWindow : Window
         Loaded += (_, _) => { ApplyBounds(); UpdateDim(); };
         KeyDown += (_, e) => { if (e.Key == Key.Escape) Cancelled?.Invoke(); };
         MouseRightButtonDown += (_, _) => Cancelled?.Invoke();
+        ContentRendered += (_, _) =>
+        {
+            if (Environment.GetEnvironmentVariable("SNAPPER_TIMING") == "1")
+            {
+                var ms = (DateTime.Now - System.Diagnostics.Process.GetCurrentProcess().StartTime).TotalMilliseconds;
+                App.Log($"Auswahl sichtbar nach {ms:F0} ms");
+            }
+        };
     }
 
     protected override void OnSourceInitialized(EventArgs e)
