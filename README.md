@@ -1,82 +1,85 @@
 # Snapper
 
-Schneller Screenshot-Ausschnitt mit Editor für Windows. Ein Nachbau der Grundidee von Skitch.
+A quick screenshot tool with a built-in editor for Windows. A recreation of the core idea of Skitch.
 
-Programm starten → der Bildschirm friert ein → Bereich aufziehen → im Editor beschriften → kopieren oder speichern.
+**English** · [Deutsch](README.de.md)
+
+Start the program → the screen freezes → drag an area → annotate in the editor → copy or save.
 
 ## Screenshots
 
-Der Editor mit Werkzeugen links, Einstellungen rechts und der roten „Ziehen“-Lasche unten:
+The editor with tools on the left, settings on the right and the red "Drag" tab at the bottom:
 
-![Der Snapper-Editor](docs/editor.png)
+![The Snapper editor](docs/editor.en.png)
 
-Die Auswahl: Bildschirm einfrieren, Bereich aufziehen, Größe wird angezeigt:
+The selection: the screen freezes, you drag an area, and the size is shown:
 
-![Die Bereichsauswahl](docs/auswahl.png)
+![The area selection](docs/auswahl.en.png)
 
-(Beispielbilder mit einem Ausschnitt der Wikipedia-Hauptseite, Text unter [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de), Autoren siehe [Wikipedia](https://en.wikipedia.org/wiki/Main_Page).)
+(Example images using a cutout of the Wikipedia main page. Text under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), authors see [Wikipedia](https://en.wikipedia.org/wiki/Main_Page).)
 
-## Funktionen
+## Features
 
-- **Sofort startklar:** Beim Start wird der Bildschirm eingefroren, du ziehst ein Rechteck auf (mit Größenanzeige). `Esc` bricht ab.
-- **Mehrere Bildschirme** und Windows-Skalierung (z. B. 125 %) werden unterstützt. Der Ausschnitt ist pixelgenau.
-- **Pfeil** im Skitch-Stil (hinten spitz, vorne dick), wächst live beim Ziehen. Weitere Stile: Gerade, Dick, Doppelt, Linie. `Umschalt` rastet die Winkel ein.
-- **Text**, **Rechteck** und **Verpixeln** (nicht umkehrbar, auch für Namen und Passwörter).
-- 6 Farben, 3 Dicken, Rückgängig und Wiederholen.
-- **Kopieren** in die Zwischenablage, **Speichern** als PNG nach `Bilder\Screenshots` (Name mit Datum und Uhrzeit).
-- **Ziehen:** Der rote Knopf „Ziehen“ unten im Editor gibt das fertige Bild als PNG-Datei weiter. Festhalten und in Mail, Chat, Explorer oder Claude Code fallen lassen. Die Datei liegt in `%TEMP%Snapper` und wird nach 7 Tagen automatisch gelöscht.
-- Zoom mit `Strg` + Mausrad, Verschieben mit der mittleren Maustaste.
+- **Ready instantly:** On start the screen freezes and you drag a rectangle (with a size display). `Esc` cancels.
+- **Multiple monitors** and Windows scaling (e.g. 125 %) are supported. The cutout is pixel-exact.
+- **Arrow** in Skitch style (pointed at the tail, thick at the head), grows live while you drag. More styles: Straight, Thick, Double, Line. `Shift` snaps the angle.
+- **Text**, **Rectangle** and **Pixelate** (not reversible, also good for names and passwords).
+- 6 colors, 3 thicknesses, undo and redo.
+- **Copy** to the clipboard, **Save** as PNG to `Pictures\Screenshots` (named with date and time).
+- **Drag:** The red "Drag" button at the bottom of the editor hands the finished image over as a PNG file. Hold it and drop it into an email, a chat or Explorer. The file lives in `%TEMP%Snapper` and is deleted automatically after 7 days.
+- Zoom with `Ctrl` + mouse wheel, pan with the middle mouse button.
+- **English and German:** The interface follows the Windows display language (German for German, English for everything else).
 
-## Tastenkürzel
+## Keyboard shortcuts
 
-| Taste | Aktion |
+| Key | Action |
 | --- | --- |
-| `A` `T` `R` `P` | Pfeil, Text, Rechteck, Verpixeln |
-| `Strg+Z` / `Strg+Y` | Rückgängig / Wiederholen |
-| `Strg+C` | Kopieren |
-| `Strg+S` | Speichern |
-| `Strg+N` | Neuer Ausschnitt |
-| `Strg+0` | Ansicht einpassen |
-| `Esc` | Editor schließen |
+| `A` `T` `R` `P` | Arrow, Text, Rectangle, Pixelate |
+| `Ctrl+Z` / `Ctrl+Y` | Undo / Redo |
+| `Ctrl+C` | Copy |
+| `Ctrl+S` | Save |
+| `Ctrl+N` | New capture |
+| `Ctrl+0` | Fit view |
+| `Esc` | Close editor |
 
-## Bauen
+## Build
 
-Voraussetzung: [.NET 10 SDK](https://dotnet.microsoft.com/download).
+Requires the [.NET 10 SDK](https://dotnet.microsoft.com/download).
 
 ```powershell
-# Entwickeln und starten
+# Develop and run
 dotnet run --project src\Snapper
 
-# Fertige Snapper.exe nach publish\ bauen
+# Build the finished Snapper.exe into publish\
 powershell -File publish.ps1
 ```
 
-Die `Snapper.exe` (ca. 140 MB) bringt .NET selbst mit. Auf dem Rechner muss nichts installiert sein.
-Du kannst sie an die Taskleiste heften. Ein Klick startet sofort die Auswahl.
+`Snapper.exe` (about 140 MB) brings .NET with it. Nothing needs to be installed on the machine.
+You can pin it to the taskbar. One click starts the selection right away.
 
-Hinweis: Die `.exe` ist nicht signiert. Beim ersten Start nach einem Download zeigt Windows evtl. „Der Computer wurde durch Windows geschützt“. Dann auf „Weitere Informationen“ und „Trotzdem ausführen“ klicken.
+Note: The `.exe` is not signed. On the first start after a download Windows may show "Windows protected your PC". Click "More info" and then "Run anyway".
 
-## Neue Version veröffentlichen
+## Publishing a new version
 
-1. In `src\Snapper\Snapper.csproj` die `<Version>` hochzählen (z. B. `1.1.0`).
-2. `powershell -File publish.ps1` ausführen. Das baut `publish\Snapper.exe`.
-3. Auf GitHub unter **Releases → Draft a new release** einen Tag anlegen, der zur Version passt (z. B. `v1.1.0`), und `publish\Snapper.exe` anhängen. Auf „Publish release“ klicken.
+1. Raise `<Version>` in `src\Snapper\Snapper.csproj` (e.g. `1.1.0`).
+2. Run `powershell -File publish.ps1`. This builds `publish\Snapper.exe`.
+3. On GitHub go to **Releases → Draft a new release**, create a tag that matches the version (e.g. `v1.1.0`) and attach `publish\Snapper.exe`. Click "Publish release".
 
-Snapper fragt beim Öffnen des Editors (höchstens alle 12 Stunden) bei GitHub nach dem neuesten Release. Ist die Version dort höher, erscheint oben der Knopf „Update x.y.z verfügbar“. Ein Klick öffnet die Release-Seite zum Herunterladen. Dabei werden keine Daten über den Nutzer gesendet. Das Update ersetzt man von Hand: Snapper schließen und die alte `Snapper.exe` überschreiben.
+When the editor opens, Snapper asks GitHub for the latest release (at most every 12 hours). If the version there is higher, an "Update x.y.z available" button appears at the top. A click opens the release page for download. No data about the user is sent. You update by hand: close Snapper and overwrite the old `Snapper.exe`.
 
-## Selbsttest (für Entwickler)
+## Self-test (for developers)
 
 ```powershell
 src\Snapper\bin\Debug\net10.0-windows\Snapper.exe --selftest C:\Temp\snapper-test
 ```
 
-Zeichnet per Code in einen Beispiel-Ausschnitt und legt `result.png` (fertiges Bild), `window.png` (Editor) und `info.txt` ab. Es werden keine Mausklicks simuliert.
+Draws into a sample cutout by code and writes `result.png` (finished image), `window.png` (editor) and `info.txt`. No mouse clicks are simulated.
 
-Optional mit eigenem Vorlagenbild (so entstehen die Bilder in `docs\`): `--bild docs\wikipedia.png` anhängen.
+Optionally add `--bild docs\wikipedia.png` to use your own template image. `--lang de` or `--lang en` forces the language. The images in `docs\` are created with `powershell -File tools\make-screenshots.ps1`.
 
-## Noch nicht drin
+## Not included yet
 
-Pfeile und Objekte nachträglich ändern und verschieben, Stift, Radierer, Zuschneiden, globales Tastenkürzel, Fenster- und Vollbild-Auswahl, Weichzeichnen.
+Editing and moving arrows and objects afterwards, pen, eraser, crop, global hotkey, window and full-screen selection, blur.
 
-Die Update-Prüfung merkt sich ihr Ergebnis in `%LOCALAPPDATA%\Snapper\update.json`.
-Fehler werden nach `%LOCALAPPDATA%\Snapper\log.txt` geschrieben.
+The update check stores its result in `%LOCALAPPDATA%\Snapper\update.json`.
+Errors are written to `%LOCALAPPDATA%\Snapper\log.txt`.

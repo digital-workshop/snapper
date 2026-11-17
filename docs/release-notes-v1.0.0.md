@@ -8,7 +8,7 @@ Der erste Release. Schneller Screenshot-Ausschnitt mit Editor für Windows. Ein 
 - **Pfeil im Skitch-Stil:** hinten spitz, vorne dick, wächst live beim Ziehen. Dazu vier weitere Stile: Gerade, Dick, Doppelt, Linie.
 - **Text, Rechteck und Verpixeln.** Verpixeln ist nicht umkehrbar, auch für Namen und Passwörter.
 - **6 Farben, 3 Dicken**, Rückgängig und Wiederholen.
-- **Ziehen:** Die rote Lasche unter dem Fenster gibt das fertige Bild als Datei weiter. Festhalten und in Mail, Chat, Explorer oder Claude Code fallen lassen.
+- **Ziehen:** Die rote Lasche unter dem Fenster gibt das fertige Bild als Datei weiter. Festhalten und in Mail, Chat oder Explorer fallen lassen.
 - **Kopieren** in die Zwischenablage und **Speichern** als PNG nach `Bilder\Screenshots`.
 - **Mehrere Bildschirme** und Windows-Skalierung werden unterstützt. Der Ausschnitt ist pixelgenau.
 - **Update-Meldung:** Gibt es eine neuere Version, zeigt Snapper oben den Knopf „Update verfügbar“.

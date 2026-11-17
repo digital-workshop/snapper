@@ -55,7 +55,7 @@ public partial class EditorWindow
         SetColor(C("#FF2D5F"));
         _sizeIdx = 1;
         BeginDraw(ph1 ? new Point(250, 305) : new Point(270, 330));
-        if (_edit != null) _edit.Text = "Hier klicken!";
+        if (_edit != null) _edit.Text = Loc.T("demo.click");
         CommitText();
 
         // Rückgängig-Test: Extra-Rechteck zeichnen und wieder entfernen

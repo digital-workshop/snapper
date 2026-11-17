@@ -10,9 +10,9 @@
     <RootNamespace>Snapper</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Assets\snapper.ico</ApplicationIcon>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
     <Product>Snapper</Product>
-    <Description>Schneller Screenshot-Ausschnitt mit Editor</Description>
+    <Description>Quick screenshot tool with editor</Description>
     <SatelliteResourceLanguages>de</SatelliteResourceLanguages>
     <TieredPGO>true</TieredPGO>
     <TieredCompilation>true</TieredCompilation>

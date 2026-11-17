@@ -26,8 +26,8 @@ public partial class EditorWindow : Window
 
     private static readonly (string Name, string Hex)[] Palette =
     {
-        ("Rot", "#FF2D5F"), ("Gelb", "#FFC53D"), ("Grün", "#22C55E"),
-        ("Blau", "#3B82F6"), ("Schwarz", "#1B1D26"), ("Weiß", "#FFFFFF"),
+        ("color.red", "#FF2D5F"), ("color.yellow", "#FFC53D"), ("color.green", "#22C55E"),
+        ("color.blue", "#3B82F6"), ("color.black", "#1B1D26"), ("color.white", "#FFFFFF"),
     };
 
     private static readonly DropShadowEffect ArrowShadow = MakeShadow();
@@ -152,7 +152,7 @@ public partial class EditorWindow : Window
                 Style = (Style)FindResource("SwatchButton"),
                 GroupName = "color",
                 Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(hex)),
-                ToolTip = name,
+                ToolTip = Loc.T(name),
                 Tag = hex,
                 IsChecked = first,
             };
@@ -166,8 +166,8 @@ public partial class EditorWindow : Window
     {
         var items = new (ArrowStyle Style, string Name)[]
         {
-            (ArrowStyle.Skitch, "Klassisch"), (ArrowStyle.Gerade, "Gerade"), (ArrowStyle.Dick, "Dick"),
-            (ArrowStyle.Doppel, "Doppelt"), (ArrowStyle.Linie, "Linie"),
+            (ArrowStyle.Skitch, "arrow.classic"), (ArrowStyle.Gerade, "arrow.straight"), (ArrowStyle.Dick, "arrow.thick"),
+            (ArrowStyle.Doppel, "arrow.double"), (ArrowStyle.Linie, "arrow.line"),
         };
         foreach (var (style, name) in items)
         {
@@ -178,7 +178,7 @@ public partial class EditorWindow : Window
                 Style = (Style)FindResource("TileButton"),
                 GroupName = "arrowstyle",
                 Content = new Canvas { Width = 68, Height = 48, Children = { path } },
-                ToolTip = name,
+                ToolTip = Loc.T(name),
                 IsChecked = style == ArrowStyle.Skitch,
             };
             rb.Click += (_, _) => _arrowStyle = style;
@@ -216,14 +216,14 @@ public partial class EditorWindow : Window
         _tool = t;
         StyleSection.Visibility = t == Tool.Arrow ? Visibility.Visible : Visibility.Collapsed;
         ColorSection.Visibility = t == Tool.Pixelate ? Visibility.Collapsed : Visibility.Visible;
-        SizeLabel.Text = t == Tool.Pixelate ? "KÖRNUNG" : "DICKE";
-        ToolTitle.Text = t switch { Tool.Arrow => "Pfeil", Tool.Text => "Text", Tool.Rect => "Rechteck", _ => "Verpixeln" };
+        SizeLabel.Text = Loc.T(t == Tool.Pixelate ? "label.grain" : "label.thickness");
+        ToolTitle.Text = t switch { Tool.Arrow => Loc.T("tool.arrow"), Tool.Text => Loc.T("tool.text"), Tool.Rect => Loc.T("tool.rect"), _ => Loc.T("tool.pixelate") };
         HintText.Text = t switch
         {
-            Tool.Arrow => "Maustaste halten und ziehen. Der Pfeil wächst mit. Umschalt = gerade Winkel.",
-            Tool.Text => "Ins Bild klicken und tippen. Enter setzt den Text, Umschalt+Enter macht eine neue Zeile.",
-            Tool.Rect => "Ziehen, um einen Rahmen zu zeichnen.",
-            _ => "Ziehen. Der Bereich wird verpixelt, z. B. für Namen oder Passwörter.",
+            Tool.Arrow => Loc.T("hint.arrow"),
+            Tool.Text => Loc.T("hint.text"),
+            Tool.Rect => Loc.T("hint.rect"),
+            _ => Loc.T("hint.pixelate"),
         };
         Host.Cursor = t == Tool.Text ? Cursors.IBeam : Cursors.Cross;
 
@@ -625,7 +625,7 @@ public partial class EditorWindow : Window
         var info = await UpdateChecker.CheckAsync();
         if (info == null) return;
         _updateUrl = info.Url;
-        UpdateText.Text = $"Update {info.Version} verfügbar";
+        UpdateText.Text = Loc.T("update.version", info.Version);
         UpdateBtn.Visibility = Visibility.Visible;
     }
 
@@ -653,7 +653,7 @@ public partial class EditorWindow : Window
         catch (Exception ex)
         {
             App.Log(ex.ToString());
-            ShowToast("Ziehen hat nicht geklappt", null);
+            ShowToast(Loc.T("toast.drag.fail"), null);
         }
     }
 
@@ -744,12 +744,12 @@ public partial class EditorWindow : Window
                 try { Clipboard.SetDataObject(data, true); break; }
                 catch (COMException) when (i < 6) { Thread.Sleep(60); }
             }
-            ShowToast("In die Zwischenablage kopiert", null);
+            ShowToast(Loc.T("toast.copied"), null);
         }
         catch (Exception ex)
         {
             App.Log(ex.ToString());
-            ShowToast("Kopieren hat nicht geklappt", null);
+            ShowToast(Loc.T("toast.copy.fail"), null);
         }
     }
 
@@ -769,12 +769,12 @@ public partial class EditorWindow : Window
             using (var fs = File.Create(file)) enc.Save(fs);
 
             _lastSavedPath = file;
-            ShowToast("Gespeichert in Bilder\\Screenshots  ·  Klick öffnet den Ordner", file);
+            ShowToast(Loc.T("toast.saved"), file);
         }
         catch (Exception ex)
         {
             App.Log(ex.ToString());
-            ShowToast("Speichern hat nicht geklappt", null);
+            ShowToast(Loc.T("toast.save.fail"), null);
         }
     }
 

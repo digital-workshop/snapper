@@ -104,8 +104,8 @@ internal static class SelfTest
                 dc.DrawText(new FormattedText(title, ci, FlowDirection.LeftToRight, new Typeface("Segoe UI Semibold"), 14,
                     new SolidColorBrush(Color.FromRgb(0x30, 0x34, 0x44)), 1.0), new Point(x + 16, y + 10));
             }
-            Win(120, 110, 820, 520, "Verkaufszahlen");
-            Win(300, 220, 1000, 560, "Projektübersicht");
+            Win(120, 110, 820, 520, Loc.T("demo.win1"));
+            Win(300, 220, 1000, 560, Loc.T("demo.win2"));
 
             if (Photo != null)
             {

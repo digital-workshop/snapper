@@ -21,6 +21,8 @@ public partial class App : Application
             args.Handled = true;
             Shutdown(1);
         };
+        int lg = Array.IndexOf(e.Args, "--lang");
+        if (lg >= 0 && lg + 1 < e.Args.Length) Loc.Override(e.Args[lg + 1]);
         CleanDragFolder();
         int i = Array.IndexOf(e.Args, "--selftest");
         if (i >= 0 && i + 1 < e.Args.Length)
