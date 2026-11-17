@@ -13,11 +13,26 @@ namespace Snapper;
 /// </summary>
 internal static class SelfTest
 {
-    public static void Run(string outDir)
+    /// <summary>Optionales Vorlagenbild ("--bild datei.png"). Gesetzt = echte Seite statt erfundener Inhalt.</summary>
+    internal static BitmapSource? Photo;
+
+    public static void Run(string outDir, string? photoPath = null)
     {
         Directory.CreateDirectory(outDir);
         EditorWindow.SkipUpdateCheck = true;
-        var sample = MakeSample(1000, 400);
+        if (photoPath != null)
+        {
+            var bi = new BitmapImage();
+            bi.BeginInit();
+            bi.CacheOption = BitmapCacheOption.OnLoad;
+            bi.UriSource = new Uri(Path.GetFullPath(photoPath));
+            bi.EndInit();
+            var pc = new FormatConvertedBitmap(bi, PixelFormats.Bgra32, null, 0);
+            pc.Freeze();
+            Photo = pc;
+        }
+        var sample = Photo != null ? new CroppedBitmap(Photo, new Int32Rect(20, 235, 1000, 400)) : MakeSample(1000, 400);
+        sample.Freeze();
         // Fenster weit außerhalb des Bildschirms, damit nichts aufblitzt.
         var fake = new ScreenShot(-32000, 0, 5120, 1440, 1.25, true, sample);
         var ed = new EditorWindow(sample, fake) { ShowActivated = false, ShowInTaskbar = false };
@@ -56,7 +71,7 @@ internal static class SelfTest
             t.Stop();
             try
             {
-                ov.DemoSelect(new Point(392, 220), new Point(1032, 520));
+                if (Photo != null) ov.DemoSelect(new Point(320, 420), new Point(960, 720)); else ov.DemoSelect(new Point(392, 220), new Point(1032, 520));
                 ov.UpdateLayout();
                 double dpi = VisualTreeHelper.GetDpi(ov).DpiScaleX;
                 int pw = (int)Math.Round(ov.ActualWidth * dpi), ph = (int)Math.Round(ov.ActualHeight * dpi);
@@ -92,6 +107,12 @@ internal static class SelfTest
             Win(120, 110, 820, 520, "Verkaufszahlen");
             Win(300, 220, 1000, 560, "Projektübersicht");
 
+            if (Photo != null)
+            {
+                double sc = 1000.0 / Photo.PixelWidth;
+                dc.DrawImage(Photo, new Rect(300, 258, 1000, Photo.PixelHeight * sc));
+                goto done;
+            }
             // Inhalt des vorderen Fensters
             dc.DrawRectangle(new SolidColorBrush(Color.FromRgb(0x23, 0x27, 0x36)), null, new Rect(300, 258, 200, 522));
             dc.DrawText(new FormattedText("Menü", ci, FlowDirection.LeftToRight, new Typeface("Segoe UI"), 16, Brushes.White, 1.0), new Point(320, 276));
@@ -103,6 +124,7 @@ internal static class SelfTest
                 new SolidColorBrush(Color.FromRgb(0x1B, 0x1D, 0x26)), 1.0), new Point(530, 430));
             dc.DrawText(new FormattedText("Beispiel-Inhalt für das Vorschaubild", ci, FlowDirection.LeftToRight, new Typeface("Segoe UI"), 16,
                 new SolidColorBrush(Color.FromRgb(0x5B, 0x60, 0x70)), 1.0), new Point(530, 475));
+            done:;
         }
         var rtb = new RenderTargetBitmap(w, h, 96, 96, PixelFormats.Pbgra32);
         rtb.Render(dv);

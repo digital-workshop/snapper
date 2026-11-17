@@ -14,7 +14,7 @@ Die Auswahl: Bildschirm einfrieren, Bereich aufziehen, Größe wird angezeigt:
 
 ![Die Bereichsauswahl](docs/auswahl.png)
 
-(Beispielbilder mit erfundenem Inhalt.)
+(Beispielbilder mit einem Ausschnitt der Wikipedia-Hauptseite, Text unter [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de), Autoren siehe [Wikipedia](https://en.wikipedia.org/wiki/Main_Page).)
 
 ## Funktionen
 
@@ -71,6 +71,8 @@ src\Snapper\bin\Debug\net10.0-windows\Snapper.exe --selftest C:\Temp\snapper-tes
 ```
 
 Zeichnet per Code in einen Beispiel-Ausschnitt und legt `result.png` (fertiges Bild), `window.png` (Editor) und `info.txt` ab. Es werden keine Mausklicks simuliert.
+
+Optional mit eigenem Vorlagenbild (so entstehen die Bilder in `docs\`): `--bild docs\wikipedia.png` anhängen.
 
 ## Noch nicht drin
 

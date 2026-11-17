@@ -24,7 +24,8 @@ public partial class EditorWindow
         }
 
         // Pfeile in allen Stilen
-        Arrow(ArrowStyle.Skitch, "#FF2D5F", 1, new Point(250, 350), new Point(520, 250));
+        bool ph1 = SelfTest.Photo != null;
+        Arrow(ArrowStyle.Skitch, "#FF2D5F", 1, ph1 ? new Point(330, 300) : new Point(250, 350), ph1 ? new Point(300, 112) : new Point(520, 250));
         Arrow(ArrowStyle.Doppel, "#3B82F6", 1, new Point(640, 360), new Point(930, 360));
         Arrow(ArrowStyle.Dick, "#22C55E", 1, new Point(640, 300), new Point(930, 290));
         Arrow(ArrowStyle.Gerade, "#1B1D26", 1, new Point(580, 150), new Point(500, 160));
@@ -35,24 +36,25 @@ public partial class EditorWindow
         SetTool(Tool.Rect);
         SetColor(C("#FF2D5F"));
         _sizeIdx = 1;
-        BeginDraw(new Point(248, 28));
-        UpdatePreview(new Point(300, 80));
-        UpdatePreview(new Point(422, 142));
-        EndDraw(new Point(422, 142));
+        bool ph0 = SelfTest.Photo != null;
+        BeginDraw(ph0 ? new Point(203, 70) : new Point(248, 28));
+        UpdatePreview(ph0 ? new Point(280, 90) : new Point(300, 80));
+        UpdatePreview(ph0 ? new Point(364, 102) : new Point(422, 142));
+        EndDraw(ph0 ? new Point(364, 102) : new Point(422, 142));
 
         // Verpixeln der "Kontonummer"
         SetTool(Tool.Pixelate);
         _sizeIdx = 1;
-        BeginDraw(new Point(590, 184));
-        UpdatePreview(new Point(700, 210));
-        UpdatePreview(new Point(840, 228));
-        EndDraw(new Point(840, 228));
+        BeginDraw(ph0 ? new Point(408, 99) : new Point(590, 184));
+        UpdatePreview(ph0 ? new Point(450, 110) : new Point(700, 210));
+        UpdatePreview(ph0 ? new Point(500, 123) : new Point(840, 228));
+        EndDraw(ph0 ? new Point(500, 123) : new Point(840, 228));
 
         // Text
         SetTool(Tool.Text);
         SetColor(C("#FF2D5F"));
         _sizeIdx = 1;
-        BeginDraw(new Point(270, 330));
+        BeginDraw(ph1 ? new Point(250, 305) : new Point(270, 330));
         if (_edit != null) _edit.Text = "Hier klicken!";
         CommitText();
 

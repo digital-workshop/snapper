@@ -25,7 +25,8 @@ public partial class App : Application
         int i = Array.IndexOf(e.Args, "--selftest");
         if (i >= 0 && i + 1 < e.Args.Length)
         {
-            SelfTest.Run(e.Args[i + 1]);
+            int b = Array.IndexOf(e.Args, "--bild");
+            SelfTest.Run(e.Args[i + 1], b >= 0 && b + 1 < e.Args.Length ? e.Args[b + 1] : null);
             return;
         }
         BeginCapture();
